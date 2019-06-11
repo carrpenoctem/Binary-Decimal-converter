@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -23,19 +24,19 @@ public class Main {
 
         boolean running = true;
         while (running) {
-            System.out.println(calculateBinary());
+            System.out.println(CalculateDecimal());
         }
-
     }
 
     /**
      * A method converting decimal to binary
+     *
      * @return binary number as a String
      */
     public static String calculateBinary() {
 
         System.out.println("Enter a decimal number");
-        int x = input.nextInt();
+        int x = parseIntFixed();
 
         /* This declaration will be used to determine the first digit */
         boolean positive;
@@ -61,7 +62,7 @@ public class Main {
         } else {
             binary.add(1);
         }
-        
+
         /* Reversing the list to provide desired order */
         Collections.reverse(binary);
 
@@ -74,4 +75,85 @@ public class Main {
         return sb.toString();
     }
 
+    /**
+     * A method converting binary to decimal
+     *
+     * @return a decimal int
+     */
+    private static int CalculateDecimal() {
+
+        /* a list to store our binary digits */
+        List<Integer> binaryDigits = new ArrayList<>();
+        /* a boolean to check if number is positive */
+        boolean positive = true;
+
+        /* boolean based loop for validating input (should be 1 and 0 only) */
+        boolean isProperDigit = false;
+        while (isProperDigit == false) {
+
+            System.out.println("Enter a binary number");
+            String x = input.nextLine();
+
+            /* turning our String of digits into a char array */
+            char[] digits = x.toCharArray();
+
+            /* validation */
+            isProperDigit = true;
+            for (int i = 0; i < digits.length; i++) {
+
+                /* checking each digit is correct */
+                if (digits[i] == '1' || digits[i] == '0') {
+
+                    /* the first digit determines if number is positive or not */
+                    if (i == 0) {
+                        if (digits[i] == '1') {
+                            positive = false;
+                        } else {
+                            positive = true;
+                        }
+                    } else {
+                        binaryDigits.add(Character.getNumericValue(digits[i]));
+                    }
+                } else {
+                    System.out.println("Wrong input!");
+                    isProperDigit = false;  // so we can try to enter data again
+                    binaryDigits.clear();   // so we get rid of unwanted input
+                    break;  // so we don't receive multiple "Wrong input" messages
+                }
+            }
+        }
+
+        /* preparing output */
+        int decimalOutput = 0;
+        Collections.reverse(binaryDigits);
+        for (int i = binaryDigits.size() - 1; i > -1; i--) {
+            decimalOutput += Math.pow(2, i) * binaryDigits.get(i);
+        }
+
+        if (positive) {
+            return decimalOutput;
+        } else {
+            return -decimalOutput;
+        }
+    }
+
+    /**
+     * This method causes a loop which ends when an input can be parsed to int
+     *
+     * @return parsed int value
+     */
+    private static int parseIntFixed() {
+        boolean running = true;
+        int out = 0;
+        while (running) {
+            String in = input.nextLine();
+            try {
+                out = Integer.parseInt(in);
+                running = false;
+            } catch (NumberFormatException e) {
+                classLogger.log(Level.WARNING, e.getMessage());
+            }
+        }
+        return out;
+    }
 }
