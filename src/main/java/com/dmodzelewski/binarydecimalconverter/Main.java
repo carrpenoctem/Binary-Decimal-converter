@@ -24,7 +24,25 @@ public class Main {
 
         boolean running = true;
         while (running) {
-            System.out.println(CalculateDecimal());
+            System.out.println("Welcome to the Binary-Decimal converter. Please enter the following:");
+            System.out.println(" 1 - Binary to decimal \n"
+                    + " 2 - Decimal to binary \n"
+                    + " 3 - Exit");
+            int x = parseIntFixed();
+            switch (x) {
+                case 1:
+                    System.out.println(CalculateDecimal());
+                    break;
+                case 2:
+                    System.out.println(calculateBinary());
+                    break;
+                case 3:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Wrong input");
+                    continue;
+            }
         }
     }
 
@@ -91,7 +109,9 @@ public class Main {
         boolean isProperDigit = false;
         while (isProperDigit == false) {
 
-            System.out.println("Enter a binary number");
+            System.out.println("Enter a binary number. \n"
+                    + "Please take a note that the first digit will be used ONLY to distinguish \n"
+                    + "wether the number is positive or negative as following: 1 - negative, 0 - positive");
             String x = input.nextLine();
 
             /* turning our String of digits into a char array */
@@ -151,7 +171,7 @@ public class Main {
                 out = Integer.parseInt(in);
                 running = false;
             } catch (NumberFormatException e) {
-                classLogger.log(Level.WARNING, e.getMessage());
+                classLogger.log(Level.WARNING, e.getMessage() + " (should be int)");
             }
         }
         return out;
